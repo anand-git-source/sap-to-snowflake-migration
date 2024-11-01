@@ -1,1 +1,33 @@
+name: Deploy to Snowflake
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+      - name: Install dependencies
+      run: pip install snowflake-connector-python
+
+    - name: Run Snowflake script
+      env:
+        SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+        SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      run: |
+        python -c "
+        import snowflake.connector
+        conn = snowflake.connector.connect(
+            user='${{ secrets.SNOWFLAKE_USER }}',
+            password='${{ secrets.SNOWFLAKE_PASSWORD }}',
+            account='${{ secrets.SNOWFLAKE_ACCOUNT }}'
+        )
+        conn.cursor().execute('RUN YOUR SQL SCRIPT HERE')
+        "
