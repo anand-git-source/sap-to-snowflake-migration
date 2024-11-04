@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    steps:
+steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
@@ -23,7 +23,7 @@ jobs:
         SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
 	      SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
 
-      run: |
+run: |
         python -c "
         import snowflake.connector
         conn = snowflake.connector.connect(
