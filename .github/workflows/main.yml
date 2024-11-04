@@ -9,27 +9,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Install dependencies
-      run: pip install snowflake-connector-python
+        run: pip install snowflake-connector-python
 
-    - name: Run Snowflake script
-      env:
-        SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-        SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-        SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
-	      SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
-
-run: |
-        python -c "
-        import snowflake.connector
-        conn = snowflake.connector.connect(
-            user='${{ secrets.SNOWFLAKE_USER }}',
-            password='${{ secrets.SNOWFLAKE_PASSWORD }}',
-            account='${{ secrets.SNOWFLAKE_ACCOUNT }}'
-        )
-        conn.cursor().execute('RUN YOUR SQL SCRIPT HERE')
-        "
+      - name: Run Snowflake script
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
+        run: |
+          python -c "
+          import snowflake.connector
+          conn = snowflake.connector.connect(
+              user='${{ secrets.SNOWFLAKE_USER }}',
+              password='${{ secrets.SNOWFLAKE_PASSWORD }}',
+              account='${{ secrets.SNOWFLAKE_ACCOUNT }}'
+          )
+          conn.cursor().execute('RUN YOUR SQL SCRIPT HERE')
+          "
