@@ -48,9 +48,13 @@ jobs:
               account='necdcsf.east-us-2.azure.snowflakecomputing.com',
               private_key=private_key_obj,  # Pass the RSAPrivateKey object directly
               private_key_passphrase='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}',  # Optional
-              insecure_mode=True
+              ssl_context=ssl.create_default_context() 
           )
-
+          
+          # Retrieve the SSL certificate details
+          cert = conn._conn.sock.getpeercert()
+          print(cert)
+          
           # Execute your SQL script
           conn.cursor().execute('RUN YOUR SQL SCRIPT HERE')
           "
