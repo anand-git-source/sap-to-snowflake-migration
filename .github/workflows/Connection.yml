@@ -36,15 +36,14 @@ jobs:
           # Load the private key object
           private_key = serialization.load_pem_private_key(
               private_key_bytes,
-              password=${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}.encode()
+              password='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}'.encode()
           )
 
           # Establish Snowflake connection using the private key object
           conn = snowflake.connector.connect(
               user='${{ secrets.SNOWFLAKE_USER }}',
               account='${{ secrets.SNOWFLAKE_ACCOUNT }}',
-              private_key=private_key,
-              private_key_passphrase='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}'
+              private_key=private_key
           )
 
           # Execute your SQL script
