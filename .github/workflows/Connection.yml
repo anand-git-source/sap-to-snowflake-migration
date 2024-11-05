@@ -25,27 +25,28 @@ jobs:
         run: |
           python -c "
           import snowflake.connector
-          from cryptography.hazmat.primitives.serialization import load_pem_private_key
+          from cryptography.hazmat.primitives import serialization
           from cryptography.hazmat.backends import default_backend
 
-          # Load the private key from a PEM file or string
-          private_key_str = '''${{ secrets.SNOWFLAKE_PRIVATE_KEY }}'''
+          # Load the private key from GitHub secrets
+          private_key = '''${{ secrets.SNOWFLAKE_PRIVATE_KEY }}'''
+          
+          # Convert private key string to bytes
+          private_key_bytes = private_key.encode('utf-8')
 
-          # Decode the private key string to bytes
-          private_key_bytes = private_key_str.encode()
-
-          # Load the private key object
-          private_key = load_pem_private_key(
+          # Load the private key from PEM format
+          private_key_obj = serialization.load_pem_private_key(
               private_key_bytes,
-              password='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}'.encode(),
+              password=None,  # If you have a passphrase, use it here
               backend=default_backend()
           )
 
-          # Establish Snowflake connection using the private key object
+          # Establish Snowflake connection with the correct private key
           conn = snowflake.connector.connect(
               user='${{ secrets.SNOWFLAKE_USER }}',
               account='${{ secrets.SNOWFLAKE_ACCOUNT }}',
-              private_key=private_key
+              private_key=private_key_obj,  # Pass the RSAPrivateKey object
+              private_key_passphrase='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}'
           )
 
           # Execute your SQL script
