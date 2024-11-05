@@ -36,7 +36,7 @@ jobs:
           # Load the private key object
           private_key = serialization.load_pem_private_key(
               private_key_bytes,
-              password=None,
+              password=${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}.encode()
           )
 
           # Establish Snowflake connection using the private key object
