@@ -21,14 +21,18 @@ jobs:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
-          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
+          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}      
         run: |
           python -c "
           import snowflake.connector
           import ssl
           from cryptography.hazmat.primitives import serialization
           from cryptography.hazmat.backends import default_backend
-
+        
+         # Retrieve the SSL certificate details
+          cert = conn._conn.sock.getpeercert()
+          print(cert)
+          
           # Load the private key from GitHub secrets (PEM format)
           private_key = '''${{ secrets.SNOWFLAKE_PRIVATE_KEY }}'''
 
@@ -51,11 +55,7 @@ jobs:
               private_key_passphrase='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}',  # Optional
               ssl_context=ssl.create_default_context() 
           )
-          
-          # Retrieve the SSL certificate details
-          cert = conn._conn.sock.getpeercert()
-          print(cert)
-          
+                  
           # Execute your SQL script
           conn.cursor().execute('RUN YOUR SQL SCRIPT HERE')
           "
