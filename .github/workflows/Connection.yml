@@ -28,11 +28,7 @@ jobs:
           import ssl
           from cryptography.hazmat.primitives import serialization
           from cryptography.hazmat.backends import default_backend
-        
-         # Retrieve the SSL certificate details
-          cert = conn._conn.sock.getpeercert()
-          print(cert)
-          
+                
           # Load the private key from GitHub secrets (PEM format)
           private_key = '''${{ secrets.SNOWFLAKE_PRIVATE_KEY }}'''
 
@@ -55,6 +51,9 @@ jobs:
               private_key_passphrase='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}',  # Optional
               ssl_context=ssl.create_default_context() 
           )
+          # Retrieve the SSL certificate details
+          cert = conn._conn.sock.getpeercert()
+          print(cert)
                   
           # Execute your SQL script
           conn.cursor().execute('RUN YOUR SQL SCRIPT HERE')
