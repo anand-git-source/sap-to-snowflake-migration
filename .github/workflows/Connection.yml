@@ -47,7 +47,8 @@ jobs:
               user='SVCSNOWFLAKEGITHUB',
               account='necdcsf.east-us-2.azure.snowflakecomputing.com',
               private_key=private_key_obj,  # Pass the RSAPrivateKey object directly
-              private_key_passphrase='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}'  # Optional
+              private_key_passphrase='${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}',  # Optional
+              insecure_mode=True
           )
 
           # Execute your SQL script
