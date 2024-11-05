@@ -25,7 +25,8 @@ jobs:
         run: |
           python -c "
           import snowflake.connector
-          from cryptography.hazmat.primitives import serialization
+          from cryptography.hazmat.primitives.serialization import load_pem_private_key
+          from cryptography.hazmat.backends import default_backend
 
           # Load the private key from a PEM file or string
           private_key_str = '''${{ secrets.SNOWFLAKE_PRIVATE_KEY }}'''
